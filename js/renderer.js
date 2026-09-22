@@ -5,6 +5,8 @@ const Renderer = {
     makeTextBox(strings) {
         const tB = document.createElement('textarea');
         tB.innerText = strings;
+        tB.classList.add('textbox');
+        tB.readOnly = true;
         this.curText = tB;
 
         document.body.appendChild(tB);
