@@ -22,7 +22,7 @@ const Renderer = {
         }
 
         if(this.textQueue.length > 0){
-            this.makeTextBox(this.textQueue.pop());
+            this.makeTextBox(this.textQueue.shift());
         }
     }
 }
