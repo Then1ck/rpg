@@ -3,46 +3,46 @@ const MainEngine = {
     curScene: null,
 
     startGame() {
-        this.sceneList.push((self) => {
-            Renderer.addTextBox("Test Text");
-            Renderer.addTextBox("Again");
-            Renderer.addTextBox("And Again");
+        let data = localStorage.getItem('curFile');
+        if(data === null){
+            data = {sceneList: ['test1', 'test2'], curScene: null}
 
-            Renderer.nextText();
+            data.curScene = data.sceneList.shift();
 
-            window.addEventListener('keydown', (event) => {
-                if(event.key === ' '){
-                    if(Renderer.nextText())
-                        MainEngine.finishScene(self);
-                }
-            })
-        })
+            localStorage.setItem('curFile', JSON.stringify(data));
+        }else {
+            data = JSON.parse(data);
+        }
+        this.loadData(data);
 
-        this.sceneList.push((self) => {
-            Renderer.addTextBox("Test Text2");
-            Renderer.addTextBox("Again");
-            Renderer.addTextBox("And Again");
+        this.startScene();
+    },
 
-            Renderer.nextText();
-
-            window.addEventListener('keydown', (event) => {
-                if(event.key === ' '){
-                    if(Renderer.nextText())
-                        MainEngine.finishScene(self);
-                }
-            })
-        })
-
-        this.finishScene(null);
+    loadData(data){
+        this.sceneList = data.sceneList;
+        this.curScene = data.curScene;
     },
 
     finishScene(scene) {
-        if(scene === this.curScene){
-            if(this.sceneList.length > 0){
-                this.curScene = this.sceneList.shift();
-                this.curScene(this.curScene);
-            }
+        if(scene !== this.curScene)return;
+        if(this.sceneList.length > 0){
+            this.curScene = this.sceneList.shift();
+            this.saveData();
+            this.startScene();
         }
+    },
+    startScene(){
+        const scene = Scenes.find(s => s.id === this.curScene);
+        
+        if(scene){
+            scene.run(scene.id)
+        }
+    },
+    saveData() {
+        localStorage.setItem('curFile', JSON.stringify({
+            sceneList: this.sceneList,
+            curScene: this.curScene
+        }))
     }
 }
 
