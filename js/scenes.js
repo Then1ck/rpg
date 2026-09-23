@@ -1,6 +1,7 @@
 const Scenes = [
     {
         id: 'test1',
+        page: 'cutscene',
         run: (self) => {
             Renderer.addTextBox("Test Text");
             Renderer.addTextBox("Again");
@@ -21,6 +22,7 @@ const Scenes = [
     },
     {
         id: 'test2',
+        page: 'cutscene',
         run: (self) => {
             Renderer.addTextBox("Test Text2");
             Renderer.addTextBox("Again");
@@ -28,6 +30,18 @@ const Scenes = [
 
             Renderer.nextText();
 
+            window.addEventListener('keydown', (event) => {
+                if(event.key === ' '){
+                    if(Renderer.nextText())
+                        MainEngine.finishScene(self);
+                }
+            })
+        }
+    }, 
+    {
+        id: 'battle1',
+        page: 'battle',
+        run: (self) => {
             window.addEventListener('keydown', (event) => {
                 if(event.key === ' '){
                     if(Renderer.nextText())

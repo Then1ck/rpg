@@ -5,7 +5,7 @@ const MainEngine = {
     startGame() {
         let data = localStorage.getItem('curFile');
         if(data === null){
-            data = {sceneList: ['test1', 'test2'], curScene: null}
+            data = {sceneList: ['test1', 'test2', 'battle1', 'test1'], curScene: null}
 
             data.curScene = data.sceneList.shift();
 
@@ -22,7 +22,6 @@ const MainEngine = {
         this.sceneList = data.sceneList;
         this.curScene = data.curScene;
     },
-
     finishScene(scene) {
         if(scene !== this.curScene)return;
         if(this.sceneList.length > 0){
@@ -31,18 +30,27 @@ const MainEngine = {
             this.startScene();
         }
     },
+    getCurrentPage(){
+        return location.pathname.split('/').pop().replace('.html', '');
+    },
     startScene(){
         const scene = Scenes.find(s => s.id === this.curScene);
-        
-        if(scene){
-            scene.run(scene.id)
+        if(!scene)return;
+        if(this.getCurrentPage() !== scene.page){
+            this.changePage(scene.page);
+            return;
         }
+        scene.run(scene.id)
     },
     saveData() {
         localStorage.setItem('curFile', JSON.stringify({
             sceneList: this.sceneList,
             curScene: this.curScene
         }))
+    },
+    changePage(page) {
+        const pg = '../gameplay/' + page + '.html';
+        window.location.href = pg;
     }
 }
 
