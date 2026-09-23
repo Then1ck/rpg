@@ -16,4 +16,5 @@ html, body {
     box-sizing: border-box;
     height: 250px;
     font-size: 50px;
+    padding: 20px;
 }
